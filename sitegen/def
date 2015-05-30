@@ -1,0 +1,19 @@
+<IfModule mod_ssl.c>
+    <VirtualHost *:80>
+        ServerName %%HOST%%
+        Redirect permanent / https://%%HOST%%/
+    </VirtualHost>
+    <VirtualHost *:443>
+        Include sites-available/%%HOST%%.conf
+
+        SSLEngine on
+        SSLCertificateFile /etc/ssl/private/%%HOST%%.crt
+        SSLCertificateKeyFile /etc/ssl/private/%%HOST%%.key
+        SSLCertificateChainFile /etc/ssl/certs/sub.class1.server.ca.pem
+    </VirtualHost>
+</IfModule>
+<IfModule !mod_ssl.c>
+    <VirtualHost *:80>
+        Include sites-available/%%HOST%%.conf
+    </VirtualHost>
+</IfModule>

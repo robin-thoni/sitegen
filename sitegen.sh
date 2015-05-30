@@ -4,7 +4,7 @@ dir="/etc/apache2/sites-available/"
 
 if [ $# -eq 0 ] || [ $# -gt 2 ]
 then
-  echo "Usage:" $(basename $0) "hostname [config=def]" >&2
+  echo "Usage:" $(basename $0) "hostname [config=default]" >&2
   exit 1
 fi
 
@@ -13,7 +13,7 @@ if [ $# -eq 2 ]
 then
   conf="$2"
 else
-  conf="def"
+  conf="default"
 fi
 
 def="/etc/sitegen/${conf}"

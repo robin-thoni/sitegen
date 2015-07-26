@@ -1,0 +1,6 @@
+#! /usr/bin/env sh
+
+mkdir -p /etc/sitegen
+install sitegen/* /etc/sitegen/
+install sitegen.sh /usr/local/bin/sitegen
+install sitegen.completion /etc/bash_completion.d/sitegen

@@ -1,0 +1,3 @@
+ServerName %%HOST%%
+DocumentRoot %%ROOT%%
+ServerAlias %%HOST%%

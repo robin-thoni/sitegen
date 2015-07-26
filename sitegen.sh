@@ -1,12 +1,43 @@
 #! /usr/bin/env sh
 
-dir="/etc/apache2/sites-available/"
+apache_dir=/etc/apache2/sites-available/
+conf_dir=/etc/sitegen/
+site_dir=/var/
 
-if [ $# -eq 0 ] || [ $# -gt 2 ]
+conf_file=/etc/sitegen/sitegen.conf
+conf_file_local=~/.sitegen.conf
+
+loadConf()
+{
+  if [ -e "$1" ]
+  then
+    echo "Found a config file: $1"
+    . "$1"
+  fi
+}
+
+makeDir()
+{
+  mkdir -p "$1"
+  if [ $? -ne 0 ]
+  then
+    exit 4
+  fi
+}
+
+getPath()
+{
+  readlink -m "$1"
+}
+
+if [ $# -eq 0 ] || [ $# -gt 2 ] || [ "$1" = "--help" ]
 then
   echo "Usage:" $(basename $0) "hostname [config=default]" >&2
   exit 1
 fi
+
+loadConf "${conf_file}"
+loadConf "${conf_file_local}"
 
 host="$1"
 if [ $# -eq 2 ]
@@ -16,25 +47,31 @@ else
   conf="default"
 fi
 
-def="/etc/sitegen/${conf}"
-def_conf="/etc/sitegen/${conf}.conf"
+conf_conf=$(getPath "${conf_dir}/${conf}.conf")
+conf_include=$(getPath "${conf_dir}/${conf}.include")
 
-adef="${dir}/${host}"
-adef_conf="${dir}/${host}.conf"
+site_conf=$(getPath "${apache_dir}/${host}.conf")
+site_include=$(getPath "${apache_dir}/${host}.include")
 
-if [ ! -f "${def}" ] || [ ! -f "${def_conf}" ]
+root_dir=$(getPath "${site_dir}/${host}")
+
+sed_host="s:%%HOST%%:${host}:g"
+sed_root="s:%%ROOT%%:${root_dir}:g"
+
+if [ ! -f "${conf_conf}" ] || [ ! -f "${conf_include}" ]
 then
-  echo "Configuration file ${def} and/or ${def_conf} error: No such file" >&2
+  echo "Configuration file ${conf_conf} and/or ${conf_include} error: No such file" >&2
   exit 2
 fi
 
-if [ -f "${adef}" ] || [ -f "${adef_conf}" ]
+if [ -f "${site_conf}" ] || [ -f "${site_include}" ]
 then
-  echo "Host already exists: ${adef} and/or ${adef_conf}" >&2
+  echo "Host already exists: ${site_conf} and/or ${site_include}" >&2
   exit 3
 fi
 
-sed="s/%%HOST%%/${host}/g"
-sed "${sed}" "${def}" > "${adef}"
-sed "${sed}" "${def_conf}" > "${adef_conf}"
-mkdir -p "/var/${host}"
+makeDir "${root_dir}"
+makeDir "${apache_dir}"
+
+sed -e "${sed_host}" -e "${sed_root}" "${conf_conf}" > "${site_conf}"
+sed -e "${sed_host}" -e "${sed_root}" "${conf_include}" > "${site_include}"

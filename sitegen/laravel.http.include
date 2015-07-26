@@ -1,0 +1,7 @@
+ServerName %%HOST%%
+DocumentRoot %%ROOT%%/public
+ServerAlias %%HOST%%
+<Directory %%ROOT%%/public>
+  Options Indexes FollowSymLinks MultiViews
+  AllowOverride All
+</Directory>

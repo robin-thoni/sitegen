@@ -1,0 +1,6 @@
+ServerName %%HOST%%
+ServerAlias %%HOST%%
+ProxyPreserveHost On
+ProxyRequests off
+ProxyPass / http://%%HOST%%/
+ProxyPassReverse / http://%%HOST%%/

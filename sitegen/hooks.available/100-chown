@@ -1,0 +1,3 @@
+user=$(logname)
+echo "chown to ${user}"
+chown ${user}:${user} ${root_dir}

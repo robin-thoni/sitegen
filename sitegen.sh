@@ -4,17 +4,8 @@ apache_dir=/etc/apache2/sites-available/
 conf_dir=/etc/sitegen/
 site_dir=/var/
 
-conf_file=/etc/sitegen/sitegen.conf
-conf_file_local=~/.sitegen.conf
-
-loadConf()
-{
-  if [ -e "$1" ]
-  then
-    echo "Found a config file: $1"
-    . "$1"
-  fi
-}
+hooks_dir=/etc/sitegen/hooks.d/
+hooks_dir_local=~/.sitegen/hooks.d/
 
 makeDir()
 {
@@ -30,14 +21,27 @@ getPath()
   readlink -m "$1"
 }
 
+applyHooks()
+{
+  dir="$1"
+  if [ -d ${dir} ]
+  then
+    for file in $(find ${dir} | sort) ;
+    do
+      echo "Applying ${file}"
+      . "${file}"
+    done
+  else
+    echo "No hooks found in ${dir}"
+  fi
+}
+
+
 if [ $# -eq 0 ] || [ $# -gt 2 ] || [ "$1" = "--help" ]
 then
   echo "Usage:" $(basename $0) "hostname [config=default]" >&2
   exit 1
 fi
-
-loadConf "${conf_file}"
-loadConf "${conf_file_local}"
 
 host="$1"
 if [ $# -eq 2 ]
@@ -75,3 +79,6 @@ makeDir "${apache_dir}"
 
 sed -e "${sed_host}" -e "${sed_root}" "${conf_conf}" > "${site_conf}"
 sed -e "${sed_host}" -e "${sed_root}" "${conf_include}" > "${site_include}"
+
+applyHooks ${hooks_dir}
+applyHooks ${hooks_dir_local}

@@ -1,0 +1,6 @@
+echo "Host: ${host}"
+echo "Root Document: ${root_dir}"
+echo "Http Configuration Source: ${conf_conf}"
+echo "Site Configuration Source: ${conf_include}"
+echo "Http Configuration Destination: ${site_conf}"
+echo "Site Configuration Destination: ${site_include}"

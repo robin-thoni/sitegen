@@ -2,7 +2,7 @@
 
 mkdir -p /etc/sitegen
 mkdir -p ~/.sitegen/hooks.d
-install sitegen/* /etc/sitegen/
-install sitegen.sh /usr/local/bin/sitegen
-install generate-ssl-cert.sh /usr/local/bin/generate-ssl-cert
-install sitegen.completion /etc/bash_completion.d/sitegen
+cp -r sitegen/ /etc/sitegen/
+cp sitegen.sh /usr/local/bin/sitegen
+cp generate-ssl-cert.sh /usr/local/bin/generate-ssl-cert
+cp sitegen.completion /etc/bash_completion.d/sitegen

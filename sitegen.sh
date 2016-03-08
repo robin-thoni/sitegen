@@ -68,9 +68,9 @@ then
   exit 2
 fi
 
-if [ -f "${site_conf}" ] || [ -f "${site_include}" ]
+if [ -f "${site_conf}" ]
 then
-  echo "Host already exists: ${site_conf} and/or ${site_include}" >&2
+  echo "Host already exists: ${site_conf}" >&2
   exit 3
 fi
 

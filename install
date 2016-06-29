@@ -4,5 +4,8 @@ mkdir -p /etc/sitegen
 mkdir -p ~/.sitegen/hooks.d
 cp -r sitegen /etc/
 cp sitegen.sh /usr/local/bin/sitegen
-cp generate-ssl-cert.sh /usr/local/bin/generate-ssl-cert
 cp sitegen.completion /etc/bash_completion.d/sitegen
+
+cp generate-ssl-cert.sh /usr/local/bin/generate-ssl-cert
+cp cert-check.sh /usr/local/bin/cert-check
+cp cert-renew-all.sh /usr/local/bin/cert-renew-all

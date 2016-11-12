@@ -15,7 +15,7 @@ cp "${dir}/cert-check.sh" /usr/local/bin/cert-check &&
 cp "${dir}/cert-renew-all.sh" /usr/local/bin/cert-renew-all &&
 
 cp "${dir}/apache/letsencrypt.conf" /etc/apache2/conf-available/letsencrypt.conf &&
-a2enmod letsencrypt &&
+a2enconf letsencrypt &&
 service apache2 reload &&
 
 if [ ! -e /etc/cron.d/cert-renew ]

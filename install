@@ -4,6 +4,7 @@ dir="$(dirname $(readlink -f "${0}"))"
 
 if [ ! -e /etc/sitegen ]
 then
+  rm -f /etc/sitegen &&
   cp -r "${dir}/sitegen" /etc/sitegen
 fi &&
 

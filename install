@@ -14,7 +14,7 @@ cp "${dir}/generate-ssl-cert.sh" /usr/local/bin/generate-ssl-cert &&
 cp "${dir}/cert-check.sh" /usr/local/bin/cert-check &&
 cp "${dir}/cert-renew-all.sh" /usr/local/bin/cert-renew-all &&
 
-cp "${dir}/apache2/letsencrypt.conf" /etc/apache/conf-available/letsencrypt.conf &&
+cp "${dir}/apache/letsencrypt.conf" /etc/apache2/conf-available/letsencrypt.conf &&
 a2enmod letsencrypt &&
 service apache2 reload &&
 

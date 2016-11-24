@@ -147,6 +147,15 @@ class SiteGen:
         for domain in domains:
             self.cert_check(domain, logger)
 
+    def cert_enddate(self, domain, logger):
+        if not self.is_cert_present(domain):
+            raise SiteGenException("Certificate not present: %s" % domain, 1)
+        logger("%s: %s" % (domain, self.get_cert_end_date(domain)))
+
+    def certs_enddate(self, domains, logger):
+        for domain in domains:
+            self.cert_enddate(domain, logger)
+
     def cert_renew(self, domain, logger):
         if self.cert_check(domain, logger):
             self.cert_request(domain, logger)
@@ -195,6 +204,8 @@ def main():
                         help='Check if certificate needs to be renewed. Check all if no domain is specified')
     parser.add_argument('--cert-renew', metavar='cert_renew', const='', nargs='?',
                         help='Renew certificate if it needs to be. Renew all that needs to be if no domain is specified')
+    parser.add_argument('--cert-enddate', metavar='cert_enddate', const='', nargs='?',
+                        help='Print certificate enddate. Print all certificates enddate if no domain is specified')
 
     parser.add_argument('--site-create', help='Create a site configuration', metavar='site_create')
     parser.add_argument('--site-remove', help='Remove a site configuration', metavar='site_remove')
@@ -234,6 +245,12 @@ def main():
                 site_gen.certs_renew(site_gen.get_all_domains(), logger)
             else:
                 site_gen.cert_renew(args.cert_renew, logger)
+
+        elif args.cert_enddate is not None:
+            if args.cert_enddate == "":
+                site_gen.certs_enddate(site_gen.get_all_domains(), logger)
+            else:
+                site_gen.cert_enddate(args.cert_enddate, logger)
 
         elif args.site_create is not None:
             site_gen.site_create(args.site_create, logger)

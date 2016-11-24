@@ -1,0 +1,13 @@
+host="${1}"
+cert_file="${2}"
+key_file="${3}"
+conf_include="${4}"
+site_conf="${5}"
+site_include="${6}"
+
+echo "Host: ${host}"
+echo "Root Document: ${root_dir}"
+echo "Http Configuration Source: ${conf_conf}"
+echo "Site Configuration Source: ${conf_include}"
+echo "Http Configuration Destination: ${site_conf}"
+echo "Site Configuration Destination: ${site_include}"

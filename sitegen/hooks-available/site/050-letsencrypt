@@ -1,8 +1,15 @@
+host="${1}"
+root_dir="${2}"
+conf_conf="${3}"
+conf_include="${4}"
+site_conf="${5}"
+site_include="${6}"
+
 count=$(grep -ci SSLCertificateFile ${site_conf})
 if [ "${count}" -ge 1 ]
 then
   echo "SSL found; generating certificate..."
-  generate-ssl-cert "${host}"
+  sitegen --cert-request "${host}"
 else
   echo "No SSL found; doing nothing"
 fi

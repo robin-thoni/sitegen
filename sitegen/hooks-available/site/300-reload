@@ -1,0 +1,8 @@
+host="${1}"
+root_dir="${2}"
+conf_conf="${3}"
+conf_include="${4}"
+site_conf="${5}"
+site_include="${6}"
+
+service apache2 reload

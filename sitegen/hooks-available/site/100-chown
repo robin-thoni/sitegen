@@ -1,3 +1,4 @@
+#! /usr/bin/env sh
 host="${1}"
 root_dir="${2}"
 conf_conf="${3}"

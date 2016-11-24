@@ -8,19 +8,15 @@ then
   cp -r "${dir}/sitegen" /etc/sitegen
 fi &&
 
-cp "${dir}/sitegen.sh" /usr/local/bin/sitegen &&
-cp "${dir}/sitegen.completion" /etc/bash_completion.d/sitegen &&
-
-cp "${dir}/generate-ssl-cert.sh" /usr/local/bin/generate-ssl-cert &&
-cp "${dir}/cert-check.sh" /usr/local/bin/cert-check &&
-cp "${dir}/cert-renew-all.sh" /usr/local/bin/cert-renew-all &&
+cp "${dir}/sitegen.py" /usr/local/bin/sitegen &&
+cp "${dir}/bash/sitegen.completion" /etc/bash_completion.d/sitegen &&
 
 cp "${dir}/apache/letsencrypt.conf" /etc/apache2/conf-available/letsencrypt.conf &&
 a2enconf letsencrypt &&
 service apache2 reload &&
 
-if [ ! -e /etc/cron.d/cert-renew ]
+if [ ! -e /etc/cron.d/sitegen-cert-renew ]
 then
-  echo '12 00  * * 1   root    cert-renew-all /etc/ssl/private $((60 * 60 * 24 * 31))' > /etc/cron.d/cert-renew
+  cp "${dir}/cron/sitegen-cert-renew" /etc/cron.d/sitegen-cert-renew
 fi &&
 service cron reload

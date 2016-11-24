@@ -11,4 +11,4 @@ _sitegen()
     COMPREPLY=()
   fi
 }
-complete -F _sitegen sitegen
+#complete -F _sitegen sitegen

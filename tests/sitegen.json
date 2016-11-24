@@ -1,0 +1,9 @@
+{
+  "siteConfDir": "./tests/etc/apache2/sites-available/",
+  "siteDir": "./tests/var/",
+  "confDir": "./sitegen/",
+  "certRenewTime": 5356800,
+  "letsencryptCommand": "./tests/fake-letsencrypt.sh",
+  "letsencryptDir": "./tests/etc/letsencrypt/live/",
+  "certDir": "./tests/etc/ssl/private/"
+}

@@ -1,0 +1,23 @@
+#! /usr/bin/env sh
+
+event="${1}"
+host="${2}"
+root_dir="${3}"
+conf_conf="${4}"
+conf_include="${5}"
+site_conf="${6}"
+site_include="${7}"
+
+if [ "${event}" != "post" ]
+then
+    exit 0
+fi
+
+count=$(grep -ci '^ *SSLCertificateFile' ${site_conf})
+if [ "${count}" -ge 1 ]
+then
+  echo "SSLCertificateFile directive found; generating certificate..."
+  sitegen --cert-request "${host}"
+else
+  echo "SSLCertificateFile directive not found; doing nothing"
+fi

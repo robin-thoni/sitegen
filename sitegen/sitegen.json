@@ -3,7 +3,19 @@
   "siteDir": "/var/",
   "confDir": "/etc/sitegen/",
   "certRenewTime": 5356800,
-  "letsencryptCommand": "letsencrypt --agree-tos --renew-by-default --standalone --standalone-supported-challenges http-01 --http-01-port 9999 --server https://acme-v01.api.letsencrypt.org/directory certonly",
+  "letsencryptCommand": "letsencrypt",
+  "letsencryptArgs": [
+    "--agree-tos",
+    "--renew-by-default",
+    "--standalone",
+    "--standalone-supported-challenges",
+    "http-01",
+    "--http-01-port",
+    "9999",
+    "--server",
+    "https://acme-v01.api.letsencrypt.org/directory",
+    "certonly"
+  ],
   "letsencryptDir": "/etc/letsencrypt/live/",
   "certDir": "/etc/ssl/private/"
 }

@@ -84,7 +84,8 @@ class SiteGen:
         out = proc.communicate()
         return proc.returncode, out[0]
 
-    def execute_hooks(self, hook_type, args):
+    def execute_hooks(self, hook_type, hook_event, args):
+        args.insert(0, hook_event)
         for hook_name in self.get_hook_files(hook_type, True):
             self.execute(self.get_hook_file(hook_type, hook_name, True), args, False)
 
@@ -117,7 +118,10 @@ class SiteGen:
         return domains
 
     def cert_request(self, domain, logger):
-        logger("Requesting: %s" % domain)
+
+        cert_files = self.get_cert_files(domain)
+        cert_files.insert(0, domain)
+        self.execute_hooks("cert", "pre", cert_files)
 
         res, out = self.execute(self.letsencryptCommand, [domain], False)
         if res != 0:
@@ -127,9 +131,7 @@ class SiteGen:
         self.symlink_letsencrypt_file(domain, "privkey.pem", domain + ".key")
         self.symlink_letsencrypt_file(domain, "chain.pem", domain + "-chain.crt")
 
-        cert_files = self.get_cert_files(domain)
-        cert_files.insert(0, domain)
-        self.execute_hooks("cert", cert_files)
+        self.execute_hooks("cert", "post", cert_files)
 
     def certs_request(self, domains, logger):
         for domain in domains:

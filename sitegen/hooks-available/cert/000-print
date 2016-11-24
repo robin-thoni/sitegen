@@ -1,8 +1,15 @@
 #! /usr/bin/env sh
-host="${1}"
-cert_file="${2}"
-key_file="${3}"
-chain_file="${4}"
+
+event="${1}"
+host="${2}"
+cert_file="${3}"
+key_file="${4}"
+chain_file="${5}"
+
+if [ "${event}" != "pre" ]
+then
+    exit 0
+fi
 
 echo "Host: ${host}"
 echo "Certificate File: ${cert_file}"

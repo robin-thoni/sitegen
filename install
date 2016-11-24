@@ -17,6 +17,7 @@ service apache2 reload &&
 
 if [ ! -e /etc/cron.d/sitegen-cert-renew ]
 then
+  rm -f  /etc/cron.d/cert-renew &&
   cp "${dir}/cron/sitegen-cert-renew" /etc/cron.d/sitegen-cert-renew
 fi &&
 service cron reload

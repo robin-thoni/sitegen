@@ -18,7 +18,7 @@ do
     do
         type=$(basename "${typedir}")
         hook=$(basename "${hookfile}")
-        sitegen --hook-"${type}"-enable "${hook}"
+        sitegen --hook-enable "${type}.${hook}"
     done
 done &&
 

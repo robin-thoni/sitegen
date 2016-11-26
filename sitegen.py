@@ -256,6 +256,7 @@ class SiteGen:
 
         self.execute_hooks("site", "pre", args)
 
+        self.make_dirs_p(self.get_site_dir(domain))
         i = 0
         while i < len(conf_files):
             self.generate_site_conf_file(domain, conf_files[i], site_files[i])

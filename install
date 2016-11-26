@@ -24,6 +24,8 @@ done &&
 
 cp "${dir}/bash/sitegen.completion" /etc/bash_completion.d/sitegen &&
 
+a2disconf letsencrypt &&
+rm /etc/apache2/conf-available/sitegen.conf &&
 cp "${dir}/apache/sitegen.conf" /etc/apache2/conf-available/sitegen.conf &&
 a2enconf sitegen &&
 service apache2 reload &&
@@ -31,6 +33,6 @@ service apache2 reload &&
 if [ ! -e /etc/cron.d/sitegen-cert-renew ]
 then
   rm -f  /etc/cron.d/cert-renew &&
-  cp "${dir}/cron/sitegen-cert-renew" /etc/cron.d/sitegen-cert-renew
-fi &&
-service cron reload
+  cp "${dir}/cron/sitegen-cert-renew" /etc/cron.d/sitegen-cert-renew &&
+  service cron reload
+fi

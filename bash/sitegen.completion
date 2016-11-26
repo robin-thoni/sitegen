@@ -1,14 +1,3 @@
 #!/usr/bin/env bash
 
-_sitegen()
-{
-  cur=${COMP_WORDS[COMP_CWORD]}
-  if [ $COMP_CWORD -eq 2 ]
-  then
-    confs=$(env ls /etc/sitegen/ 2>/dev/null | sed 's/\.[^.]*$//' | sort | uniq | sed 's/^sitegen$//')
-    COMPREPLY=($(compgen -W "${confs}" "${cur}"))
-  else
-    COMPREPLY=()
-  fi
-}
-#complete -F _sitegen sitegen
+eval "$(register-python-argcomplete sitegen)"

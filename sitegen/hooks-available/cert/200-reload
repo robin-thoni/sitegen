@@ -1,0 +1,14 @@
+#! /usr/bin/env sh
+
+event="${1}"
+host="${2}"
+cert_file="${3}"
+key_file="${4}"
+chain_file="${5}"
+
+if [ "${event}" != "post" ]
+then
+    exit 0
+fi
+
+service apache2 reload

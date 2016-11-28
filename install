@@ -25,7 +25,7 @@ done &&
 cp "${dir}/bash/sitegen.completion" /etc/bash_completion.d/sitegen &&
 
 a2disconf letsencrypt &&
-rm /etc/apache2/conf-available/sitegen.conf &&
+rm -f /etc/apache2/conf-available/sitegen.conf &&
 cp "${dir}/apache/sitegen.conf" /etc/apache2/conf-available/sitegen.conf &&
 a2enconf sitegen &&
 service apache2 reload &&

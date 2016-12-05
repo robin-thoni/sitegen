@@ -6,6 +6,7 @@
   "letsencryptCommand": "letsencrypt",
   "letsencryptArgs": [
     "--agree-tos",
+    "--text",
     "--renew-by-default",
     "--webroot",
     "--webroot-path",

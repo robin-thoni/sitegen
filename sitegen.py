@@ -204,6 +204,7 @@ class SiteGen:
         self.symlink_letsencrypt_file(domain, "cert.pem", domain + ".crt")
         self.symlink_letsencrypt_file(domain, "privkey.pem", domain + ".key")
         self.symlink_letsencrypt_file(domain, "chain.pem", domain + "-chain.crt")
+        self.symlink_letsencrypt_file(domain, "fullchain.pem", domain + "-fullchain.crt")
 
         self.execute_hooks("cert", "post", cert_files)
 

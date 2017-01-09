@@ -3,17 +3,40 @@
   "siteDir": "/var/",
   "confDir": "/etc/sitegen/",
   "certRenewTime": 5356800,
-  "letsencryptCommand": "letsencrypt",
-  "letsencryptArgs": [
-    "--agree-tos",
-    "--text",
-    "--renew-by-default",
-    "--webroot",
-    "--webroot-path",
-    "/tmp/acme-challenge/",
-    "--server",
-    "https://acme-v01.api.letsencrypt.org/directory",
-    "certonly"
+  "letsencryptCommands": [
+    {
+      "patterns": "*",
+      "command": {
+        "letsencryptCommand": "letsencrypt",
+        "letsencryptArgs": [
+          "--agree-tos",
+          "--text",
+          "--renew-by-default",
+          "--webroot",
+          "--webroot-path",
+          "/tmp/acme-challenge/",
+          "--server",
+          "https://acme-v01.api.letsencrypt.org/directory",
+          "certonly"
+        ]
+      }
+    },
+    {
+      "patterns": "*",
+      "command": {
+        "letsencryptCommand": "letsencrypt",
+        "letsencryptArgs": [
+          "--agree-tos",
+          "--text",
+          "--renew-by-default",
+          "--authenticator",
+          "certbot-dns:auth",
+          "--server",
+          "https://acme-v01.api.letsencrypt.org/directory",
+          "certonly"
+        ]
+      }
+    }
   ],
   "letsencryptDir": "/etc/letsencrypt/live/",
   "certDir": "/etc/ssl/private/"

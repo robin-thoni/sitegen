@@ -10,6 +10,7 @@ then
   cp -r "${dir}/sitegen" /etc/sitegen
 fi &&
 
+rm -f /usr/local/bin/sitegen &&
 cp "${dir}/sitegen.py" /usr/local/bin/sitegen &&
 
 for typedir in "${dir}"/sitegen/hooks-available/*
@@ -22,9 +23,10 @@ do
     done
 done &&
 
+rm -f /etc/bash_completion.d/sitegen &&
 cp "${dir}/bash/sitegen.completion" /etc/bash_completion.d/sitegen &&
 
-a2disconf letsencrypt &&
+(a2disconf letsencrypt && rm -f /etc/apache2/conf-available/letsencrypt.conf || exit 0) &&
 rm -f /etc/apache2/conf-available/sitegen.conf &&
 cp "${dir}/apache/sitegen.conf" /etc/apache2/conf-available/sitegen.conf &&
 a2enconf sitegen &&

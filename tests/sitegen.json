@@ -3,9 +3,28 @@
   "siteDir": "./tests/var/",
   "confDir": "./sitegen/",
   "certRenewTime": 5356800,
-  "letsencryptCommand": "./tests/fake-letsencrypt.sh",
-  "letsencryptArgs": [
-    "Test."
+  "letsencryptCommands": [
+    {
+      "patterns": [
+        "error.com",
+        "*.error.com"
+      ],
+      "command": {
+        "letsencryptCommand": "./tests/fake-letsencrypt.sh",
+        "letsencryptArgs": [
+          "error"
+        ]
+      }
+    },
+    {
+      "patterns": "*",
+      "command": {
+        "letsencryptCommand": "./tests/fake-letsencrypt.sh",
+        "letsencryptArgs": [
+          "Test."
+        ]
+      }
+    }
   ],
   "letsencryptDir": "./tests/etc/letsencrypt/live/",
   "certDir": "./tests/etc/ssl/private/"

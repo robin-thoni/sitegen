@@ -5,9 +5,9 @@ arg="${1}"
 d="${2}"
 host="${3}"
 
-if [ "${host}" = "error.com" ] || [ "${arg}" != "Test." ] || [ "${d}" != "-d" ]
+if [ "${arg}" != "Test." ] || [ "${d}" != "-d" ]
 then
-    echo "Failed to get certificate" >&2
+    echo "Failed to get certificate: ${arg}" >&2
     exit 1
 fi &&
 

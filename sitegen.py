@@ -1,5 +1,5 @@
 #! /usr/bin/env python3
-
+import fnmatch
 import json
 import argparse
 import os
@@ -26,8 +26,7 @@ class SiteGen:
     hooksAvailableDir = ""
     templatesDir = ""
     certRenewTime = ""
-    letsencryptCommand = ""
-    letsencryptArgs = []
+    letsencryptCommands = ""
     letsencryptDir = ""
     certDir = ""
 
@@ -39,8 +38,7 @@ class SiteGen:
         self.hooksAvailableDir = path.join(self.confDir, "hooks-available")
         self.templatesDir = path.join(self.confDir, "templates")
         self.certRenewTime = config["certRenewTime"]
-        self.letsencryptCommand = config["letsencryptCommand"]
-        self.letsencryptArgs = config["letsencryptArgs"]
+        self.letsencryptCommands = config["letsencryptCommands"]
         self.letsencryptDir = config["letsencryptDir"]
         self.certDir = config["certDir"]
 
@@ -73,6 +71,14 @@ class SiteGen:
 
     def get_letsencrypt_dir(self, domain):
         return path.join(self.letsencryptDir, domain)
+
+    def get_letsencrypt_command(self, domain):
+        for d in self.letsencryptCommands:
+            patterns = d['patterns'] if isinstance(d['patterns'], list) else [d['patterns']]
+            for pattern in patterns:
+                if fnmatch.fnmatch(domain, pattern):
+                    return d['command']
+        return None
 
     def symlink_letsencrypt_file(self, domain, file, outfile):
         letsencrypt_cert_file = path.abspath(self.get_letsencrypt_dir(domain))
@@ -193,11 +199,13 @@ class SiteGen:
         cert_files.insert(0, domain)
         self.execute_hooks("cert", "pre", cert_files)
 
-        args = self.letsencryptArgs.copy()
+        command = self.get_letsencrypt_command(domain)
+
+        args = command['letsencryptArgs'].copy()
         args.append("-d")
         args.append(domain)
 
-        res, out = self.execute(self.letsencryptCommand, args, False)
+        res, out = self.execute(command['letsencryptCommand'], args, False)
         if res != 0:
             raise SiteGenException("Certificate request failed with code %i" % res, res)
 

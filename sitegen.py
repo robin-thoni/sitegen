@@ -133,13 +133,22 @@ class SiteGen:
                 domains.append(file[:-4])
         return domains
 
-    def get_all_site_templates(self):
+    def get_all_site_confs(self):
         files = os.listdir(self.get_site_template_dir())
         files.sort()
         templates = []
         for file in files:
             if file.endswith(".conf"):
                 templates.append(file[:-5])
+        return templates
+
+    def get_all_site_incs(self):
+        files = os.listdir(self.get_site_template_dir())
+        files.sort()
+        templates = []
+        for file in files:
+            if file.endswith(".include"):
+                templates.append(file[:-8])
         return templates
 
     def get_all_sites(self):
@@ -165,10 +174,10 @@ class SiteGen:
             path.join(self.siteConfDir, domain + ".include")
         ]
 
-    def get_site_template_conf_files(self, template):
+    def get_site_template_conf_files(self, inc, conf):
         return [
-            path.join(self.get_site_template_dir(), template + ".conf"),
-            path.join(self.get_site_template_dir(), template + ".include")
+            path.join(self.get_site_template_dir(), conf + ".conf"),
+            path.join(self.get_site_template_dir(), inc + ".include")
         ]
 
     def get_site_dir(self, domain):
@@ -180,8 +189,8 @@ class SiteGen:
                 return True
         return False
 
-    def is_site_template_present(self, template):
-        for file in self.get_site_template_conf_files(template):
+    def is_site_template_present(self, inc, conf):
+        for file in self.get_site_template_conf_files(inc, conf):
             if path.isfile(file):
                 return True
         return False
@@ -249,14 +258,14 @@ class SiteGen:
         for domain in domains:
             self.cert_renew(domain)
 
-    def site_create(self, domain, template):
+    def site_create(self, domain, inc, conf):
         if self.is_site_present(domain):
             raise SiteGenException("Site is present", 1)
-        if not self.is_site_template_present(template):
+        if not self.is_site_template_present(inc, conf):
             raise SiteGenException("Template is not present", 1)
 
         args = [domain, self.get_site_dir(domain)]
-        conf_files = self.get_site_template_conf_files(template)
+        conf_files = self.get_site_template_conf_files(inc, conf)
         site_files = self.get_site_conf_files(domain)
         for f in conf_files:
             args.append(f)
@@ -296,13 +305,18 @@ class SiteGen:
         os.remove(self.get_hook_file(hook_type, hook_name, True))
 
 
-def parse_domain(domain):
-    site_template = "default"
+def parse_domain(domain, default_inc="default", default_conf="https"):
+    inc = default_inc
+    conf = default_conf
     if ":" in domain:
         split = domain.split(":")
         domain = split[0]
-        site_template = split[1]
-    return domain, site_template
+        inc = split[1]
+        if "." in inc:
+            split = inc.split(".")
+            inc = split[0]
+            conf = split[1]
+    return domain, inc, conf
 
 
 def parse_hook(hook):
@@ -328,16 +342,25 @@ def domain_completer(prefix, **kwargs):
     return site_gen.get_all_domains()
 
 
-def site_template_completer(prefix, **kwargs):
+def site_conf_completer(prefix, **kwargs):
     site_gen = get_site_gen(prefix, **kwargs)
-    return site_gen.get_all_site_templates()
+    return site_gen.get_all_site_confs()
+
+
+def site_inc_completer(prefix, **kwargs):
+    site_gen = get_site_gen(prefix, **kwargs)
+    return site_gen.get_all_site_incs()
 
 
 def site_create_completer(prefix, **kwargs):
-    if ":" in prefix:
-        domain, template = parse_domain(prefix)
-        templates = site_template_completer(prefix, **kwargs)
-        return [domain + ":" + elt for elt in templates]
+    domain, inc, conf = parse_domain(prefix, None, None)
+    if inc is not None:
+        if conf is not None:
+            templates = site_conf_completer(prefix, **kwargs)
+            return [domain + ":" + inc + "." + elt for elt in templates]
+        else:
+            templates = site_inc_completer(prefix, **kwargs)
+            return [domain + ":" + elt for elt in templates]
 
     return domain_completer(prefix, **kwargs)
 
@@ -404,8 +427,8 @@ def main():
                 site_gen.cert_enddate(args.cert_enddate)
 
         elif args.site_create is not None:
-            domain, site_template = parse_domain(args.site_create)
-            site_gen.site_create(domain, site_template)
+            domain, inc, conf = parse_domain(args.site_create)
+            site_gen.site_create(domain, inc, conf)
 
         elif args.hook_enable is not None:
             hook_type, hook_name = parse_hook(args.hook_enable)

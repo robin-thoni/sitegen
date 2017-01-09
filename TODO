@@ -1,1 +1,2 @@
 site remove?
+add sitegen command to hooks' arguments ('./sitegen.py --config ./tests/sitegen.json')

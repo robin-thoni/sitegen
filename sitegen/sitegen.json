@@ -7,7 +7,7 @@
     {
       "patterns": "*",
       "command": {
-        "letsencryptCommand": "letsencrypt",
+        "letsencryptCommand": "certbot",
         "letsencryptArgs": [
           "--agree-tos",
           "--text",
@@ -15,8 +15,6 @@
           "--webroot",
           "--webroot-path",
           "/tmp/acme-challenge/",
-          "--server",
-          "https://acme-v01.api.letsencrypt.org/directory",
           "certonly"
         ]
       }
@@ -24,15 +22,13 @@
     {
       "patterns": "*",
       "command": {
-        "letsencryptCommand": "letsencrypt",
+        "letsencryptCommand": "certbot",
         "letsencryptArgs": [
           "--agree-tos",
           "--text",
           "--renew-by-default",
           "--authenticator",
           "certbot-dns:auth",
-          "--server",
-          "https://acme-v01.api.letsencrypt.org/directory",
           "certonly"
         ]
       }

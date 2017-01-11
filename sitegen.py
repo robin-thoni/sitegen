@@ -93,14 +93,14 @@ class SiteGen:
                 path.abspath(path.join(self.certDir, domain + "-chain.crt"))]
 
     def execute(self, exe, args, get_output):
-        args = args.copy()
+        args = args[:]
         args.insert(0, exe)
         proc = subprocess.Popen(args, stdout=(subprocess.PIPE if get_output else None))
         out = proc.communicate()
         return proc.returncode, out[0]
 
     def execute_hooks(self, hook_type, hook_event, args):
-        args = args.copy()
+        args = args[:]
         args.insert(0, hook_event)
         for hook_name in self.get_hook_files(hook_type, True):
             self.execute(self.get_hook_file(hook_type, hook_name, True), args, False)
@@ -210,7 +210,7 @@ class SiteGen:
 
         command = self.get_letsencrypt_command(domain)
 
-        args = command['letsencryptArgs'].copy()
+        args = command['letsencryptArgs'][:]
         args.append("-d")
         args.append(domain)
 

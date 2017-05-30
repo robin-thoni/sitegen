@@ -1,6 +1,6 @@
 *.swp
 /tests/etc
-/sitegen/hooks-enabled
+/extra/sitegen/hooks-enabled
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

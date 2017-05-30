@@ -5,7 +5,10 @@
   "certRenewTime": 5356800,
   "letsencryptCommands": [
     {
-      "patterns": "*",
+      "patterns": [
+        "example.com",
+        "*.example.com"
+      ],
       "command": {
         "letsencryptCommand": "certbot",
         "letsencryptArgs": [

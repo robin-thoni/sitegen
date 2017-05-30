@@ -28,7 +28,7 @@
           "--text",
           "--renew-by-default",
           "--authenticator",
-          "certbot-dns:auth",
+          "certbot-pdns:auth",
           "certonly"
         ]
       }

@@ -1,7 +1,7 @@
 {
   "siteConfDir": "./tests/etc/apache2/sites-available/",
   "siteDir": "./tests/var/",
-  "confDir": "./sitegen/",
+  "confDir": "./extra/sitegen/",
   "certRenewTime": 5356800,
   "letsencryptCommands": [
     {

@@ -18,7 +18,7 @@ python2 setup.py install
 Configuration
 -------------
 
-Configuration must be copied from `/usr/local/etc/sitegen` to `/etc/sitegen`:
+Configuration should have been copied from `/usr/local/etc/sitegen` to `/etc/sitegen` at install time.
 
 sitegen.json looks like:
 ```
@@ -88,7 +88,7 @@ There's two types of hooks:
  - Certificate: Cert hooks are triggered when creating a site using the --site-create flag. Hooks are executed once per site, before and after creation.
  - Site: Site hooks are triggered when requesting/renewing a certificate using the flags --cert-request and --cert-renew. Hooks are executed once per certificate, before and after request/renew.
 
-Hooks must be enabled/disabled using `--hook-enable` and `--hook-disable` arguments.
+Hooks must be enabled/disabled using `--hook-enable` and `--hook-disable` arguments. By default, all hooks should be enabled.
 
 Some hooks are provided:
  - Certificates

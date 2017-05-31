@@ -19,7 +19,7 @@ def package_files(directory):
 
 setup(
     name='sitegencli',
-    version="1.0.1",
+    version="1.0.0",
 
     description="CLI tool to build web site configuration",
     long_description="""\
@@ -68,12 +68,12 @@ Also provide a simpler way to request SSL certificate over certbot""",
     },
 
     data_files=[
-        ('/etc/sitegen/hooks-available/cert/', package_files('extra/sitegen/hooks-available/cert/')),
-        ('/etc/sitegen/hooks-available/site/', package_files('extra/sitegen/hooks-available/site/')),
-        ('/etc/sitegen/templates/', package_files('extra/sitegen/templates/')),
         ('/etc/bash_completion.d/', ['extra/bash/sitegen']),
         ('share/sitegen/', ['extra/apache/sitegen.conf']),
-        ('etc/sitegen/', ['extra/sitegen/sitegen.json'])
+        ('etc/sitegen/', ['extra/sitegen/sitegen.json']),
+        ('etc/sitegen/hooks-available/cert/', package_files('extra/sitegen/hooks-available/cert/')),
+        ('etc/sitegen/hooks-available/site/', package_files('extra/sitegen/hooks-available/site/')),
+        ('etc/sitegen/templates/', package_files('extra/sitegen/templates/'))
     ],
 
     entry_points={

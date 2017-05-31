@@ -81,6 +81,41 @@ Configuration keys:
  - letsencryptDir: The root directory used by letsencrypt (certbot)
  - certDir: Where to put symlink to certificate files
 
+Hooks
+-----
+
+There's two types of hooks:
+ - Certificate: Cert hooks are triggered when creating a site using the --site-create flag. Hooks are executed once per site, before and after creation.
+ - Site: Site hooks are triggered when requesting/renewing a certificate using the flags --cert-request and --cert-renew. Hooks are executed once per certificate, before and after request/renew.
+
+Hooks must be enabled/disabled using `--hook-enable` and `--hook-disable` arguments.
+
+Some hooks are provided:
+ - Certificates
+    - 000-print: Print request/renewal details, before request/renewal.
+    - 100-mkwebroot: make directory for the letsencrypt challenge, to be used with `extra/apache/sitegen.conf`, before request/renewal.
+    - 200-reload: Reload apache daemon, after request/renewal.
+ - Sites
+    - 000-print: Print site details, before site creation.
+    - 100-sitegen-cert-request: Request a letsencrypt certificate if SSL is detected in site configuration files, after site creation.
+    - 200-chown: Change owner of the document root to the user running the command, after site creation.
+    - 300-a2ensite: Enable site in apache, after site creation.
+    - 400-reload: Reload apache daemon, after site creation.
+
+
+Templates
+---------
+
+Templates are used to generate apache site configuration. They are split in two files:
+ - Transport configuration (*.conf): These files setup the http and/or https configuration to be used.
+ - Site configuration (*.include): These files setup the site configuration, as document root, server name, aliases, location, etc. They are included ine the .conf files using Include directive.
+
+Default templates are default.include and https.conf. Templates can be specified when creating site by using the following syntax:
+```
+sitegen --site-create www.example.com:docker.rhttps
+```
+Where `www.example.com` is the site to create, `docker` is the `docker.include` template and `rhttps` is the `rhttps.conf` template.
+
 Usage
 -----
 

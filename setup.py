@@ -1,13 +1,39 @@
 #! /usr/bin/env python
 from os import path
 import os
+
+import shutil
+import subprocess
+
 from setuptools import setup, find_packages
+from setuptools.command.install import install
 
 install_requires = [
     'argcomplete'
 ]
 
 here = path.abspath(path.dirname(__file__))
+
+
+class InstallCommand(install):
+    def run(self):
+        install.run(self)
+        try:
+            if path.isdir('/etc/bash_completion.d/'):
+                shutil.copy('extra/bash/sitegen', '/etc/bash_completion.d/')
+        except Exception as e:
+            print(e)
+        try:
+            if not path.isdir('/etc/sitegen/'):
+                shutil.copytree('extra/sitegen/', '/etc/sitegen/')
+                os.mkdir('/etc/sitegen/hooks-enabled/')
+                for hook_type in ['site', 'cert']:
+                    os.mkdir('/etc/sitegen/hooks-enabled/%1s' % hook_type)
+                    for file in os.listdir('/etc/sitegen/hooks-available/%1s/' % hook_type):
+                        os.symlink('../../hooks-available/%1s/%2s' % (hook_type, file),
+                                   '/etc/sitegen/hooks-enabled/%1s/%2s' % (hook_type, file))
+        except Exception as e:
+            print(e)
 
 
 def package_files(directory):
@@ -68,7 +94,7 @@ Also provide a simpler way to request SSL certificate over certbot""",
     },
 
     data_files=[
-        ('/etc/bash_completion.d/', ['extra/bash/sitegen']),
+        ('share/sitegen/bash_completion.d/', ['extra/bash/sitegen']),
         ('share/sitegen/', ['extra/apache/sitegen.conf']),
         ('etc/sitegen/', ['extra/sitegen/sitegen.json']),
         ('etc/sitegen/hooks-available/cert/', package_files('extra/sitegen/hooks-available/cert/')),
@@ -83,6 +109,6 @@ Also provide a simpler way to request SSL certificate over certbot""",
     },
 
     cmdclass={
-        # 'install': PostInstallCommand,
+        'install': InstallCommand,
     }
 )
